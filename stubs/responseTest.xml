@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://service.recaudosdavivienda.com/">
+    <SOAP-ENV:Body>
+        <ns1:consultaRecaudoResponse>
+            <return>
+                <codigoRespuestaConsulta>0</codigoRespuestaConsulta>
+                <estadoFactura>3</estadoFactura>
+                <fechaVencimiento>20220518</fechaVencimiento>
+                <indicadorFacturaValida>true</indicadorFacturaValida>
+                <mensajeRespuestaConsulta>Fue exitoso</mensajeRespuestaConsulta>
+                <valorFactura>10000.00</valorFactura>
+            </return>
+        </ns1:consultaRecaudoResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
