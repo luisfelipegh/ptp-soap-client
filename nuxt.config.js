@@ -1,10 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
 import lang from './config/lang'
-import fs from 'fs'
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
+    loading: '~/components/LoadingBar.vue',
     titleTemplate: '%s - soap-cli',
     title: 'soap-cli',
     meta: [
@@ -81,6 +81,5 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+  build: {}
 }

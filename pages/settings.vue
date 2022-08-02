@@ -5,7 +5,8 @@
     <v-card-text>
       <v-row class="align-center">
         <v-col cols="12" md="10">
-          <v-text-field :disabled="!isEditing('url')" v-model="generalSettings.url.value" :label="$t('settings.url')"></v-text-field>
+          <v-text-field :disabled="!isEditing('url')" v-model="generalSettings.url.value" :label="$t('settings.url')">
+          </v-text-field>
         </v-col>
         <v-col cols="12" md="2">
           <v-btn @click="updateSetting('url')">{{ $t('generals.' + (isEditing('url') ? 'save' : 'edit')) }}</v-btn>
@@ -41,6 +42,10 @@ export default {
     updateSetting(key) {
       if (this.generalSettings[key].editing) {
         localStorage.setItem(`generalSettings.${key}`, this.generalSettings[key].value)
+        if (key === 'url') {
+          $nuxt.$emit('updatedUrl', this.generalSettings[key].value)
+          $nuxt.$emit('showToast', this.$t('generals.saved'))
+        }
       }
 
       this.generalSettings[key].editing = !(this.generalSettings[key].editing)
