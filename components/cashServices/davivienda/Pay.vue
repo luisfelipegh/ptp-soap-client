@@ -1,5 +1,6 @@
 <template>
-    <v-form v-model="valid">
+    <v-form ref="formPay" v-model="valid" lazy-validation>
+        <Loading :loading="loading"></Loading>
         <v-container class="pa-0">
             <v-row>
                 <v-col cols="12" md="4">
@@ -9,14 +10,9 @@
                     </v-combobox>
                 </v-col>
                 <v-col cols="12" md="4">
-                    <v-text-field v-model="paymentConfirmationCode" :counter="8"
-                        :rules="rules.paymentConfirmationCode" type="number"
-                        :label="$t('cash_services.services.davivienda.fields.paymentConfirmationCode')" required>
-                    </v-text-field>
-                </v-col>
-                <v-col cols="12" md="4">
-                    <v-text-field v-model="iacCode" :counter="13" :rules="rules.iacCode" type="number"
-                        :label="$t('cash_services.services.davivienda.fields.iacCode')" required>
+                    <v-text-field v-model="paymentConfirmationCode" :counter="8" :rules="rules.paymentConfirmationCode"
+                        type="number" :label="$t('cash_services.services.davivienda.fields.paymentConfirmationCode')"
+                        required>
                     </v-text-field>
                 </v-col>
                 <v-col cols="12" md="4">
@@ -35,7 +31,7 @@
                         transition="scale-transition" offset-y min-width="auto">
                         <template v-slot:activator="{ on, attrs }">
                             <v-text-field v-model="invoiceDueDate"
-                                :label="$t('cash_services.services.davivienda.fields.paymentDate')"
+                                :label="$t('cash_services.services.davivienda.fields.invoiceDueDate')"
                                 prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
                         </template>
                         <v-date-picker v-model="invoiceDueDate" @input="invoiceDueDateMenu = false"></v-date-picker>
@@ -67,47 +63,77 @@
                         :rules="rules.paymentSchedule">
                     </v-combobox>
                 </v-col>
-                <v-col cols="12" md="4">                
+                <v-col cols="12" md="4" v-if="isCheck">
                     <v-text-field v-model="checkNumber" :counter="9" :rules="rules.checkNumber" type="number"
                         :label="$t('cash_services.services.davivienda.fields.checkNumber')" required>
                     </v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="4">                
+                <v-col cols="12" md="4">
                     <v-text-field v-model="agreement" :counter="8" :rules="rules.agreement" type="number"
                         :label="$t('cash_services.services.davivienda.fields.agreement')" required>
                     </v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="4">                
+                <v-col cols="12" md="4">
                     <v-text-field v-model="paymentOffice" :counter="6" :rules="rules.paymentOffice" type="number"
                         :label="$t('cash_services.services.davivienda.fields.paymentOffice')" required>
                     </v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="4">                
+                <v-col cols="12" md="4">
                     <v-text-field v-model="reference1" :counter="32" :rules="rules.reference1" type="number"
                         :label="$t('cash_services.services.davivienda.fields.reference1')" required>
                     </v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="4">                
+                <v-col cols="12" md="4">
                     <v-text-field v-model="reference2" :counter="32" :rules="rules.reference2" type="number"
                         :label="$t('cash_services.services.davivienda.fields.reference2')" required>
                     </v-text-field>
                 </v-col>
-
-                <v-col cols="12" md="4">                
+                <v-col cols="12" md="4">
                     <v-text-field v-model="terminal" :counter="6" :rules="rules.terminal" type="number"
                         :label="$t('cash_services.services.davivienda.fields.terminal')" required>
                     </v-text-field>
+                </v-col>
+                <v-col cols="12" md="4" v-if="isCheck">
+                    <v-combobox v-model="exchangeType" :items="exchangeTypes"
+                        :label="$t('cash_services.services.davivienda.fields.exchangeType')"
+                        :rules="rules.exchangeType">
+                    </v-combobox>
+                </v-col>
+            </v-row>
+
+            <v-row>
+                <v-col cols="12" md="4">
+                    <v-text-field v-model="invoiceAmount" :rules="rules.invoiceAmount" prefix="COP" type="number"
+                        :label="$t('cash_services.services.davivienda.fields.invoiceAmount')" required>
+                    </v-text-field>
+                </v-col>
+                <v-col cols="12" md="4">
+                    <v-text-field v-model="cashAmount" :rules="rules.cashAmount" prefix="COP" type="number"
+                        :label="$t('cash_services.services.davivienda.fields.cashAmount')" required>
+                    </v-text-field>
+                </v-col>
+                <v-col cols="12" md="4" v-if="isCheck">
+                    <v-text-field v-model="checkAmount" :rules="rules.checkAmount" prefix="COP" type="number"
+                        :label="$t('cash_services.services.davivienda.fields.checkAmount')" required>
+                    </v-text-field>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12" md="12" align="end">
+                    <v-btn color="primary" class="mr-4" @click="pay" :loading="loading" :disabled="!valid">
+                        {{ $t('generals.pay') }}
+                    </v-btn>
                 </v-col>
             </v-row>
         </v-container>
     </v-form>
 </template>
 <script>
-import davivienda from './davivienda'
+import davivienda from '../../../mixins/davivienda'
 
 export default {
     name: "findByReference",
@@ -123,16 +149,47 @@ export default {
             paymentDate: '',
             paymentTime: '',
             invoiceDueDate: '',
-            iacCode: '',
             paymentMethod: '',
             paymentSchedule: '',
-            checkNumber:'',
+            checkNumber: '',
             agreement: '',
             paymentOffice: '',
             reference1: '',
             reference2: '',
             terminal: '',
+            exchangeType: '',
+            cashAmount: '',
+            checkAmount: '',
+            invoiceAmount: ''
         }
+    },
+    computed: {
+        isCheck() {
+            return this.paymentMethod.value == 2 || this.paymentMethod.value == 3
+        }
+    },
+    beforeMount() {
+        if (localStorage.getItem(`davivienda.agreement`)) {
+            this.agreement = localStorage.getItem(`davivienda.agreement`)
+        }
+        if (localStorage.getItem(`davivienda.paymentSchedule`)) {
+            this.paymentSchedule = JSON.parse(localStorage.getItem(`davivienda.paymentSchedule`))
+        }
+        if (localStorage.getItem(`davivienda.terminal`)) {
+            this.terminal = localStorage.getItem(`davivienda.terminal`)
+        }
+        if (localStorage.getItem(`davivienda.paymentChannel`)) {
+            this.paymentChannel = JSON.parse(localStorage.getItem(`davivienda.paymentChannel`))
+        }
+
+        this.invoiceDueDate = (new Date()).toLocaleDateString('en-CA');
+
+        this.paymentDate = (new Date()).toLocaleDateString('en-CA');
+
+        this.paymentTime = (new Date).toLocaleTimeString('en', {
+            hour: '2-digit',
+            minute: '2-digit', hour12: false
+        })
     }
 }
 </script>

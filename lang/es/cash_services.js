@@ -37,6 +37,15 @@ export default {
                     creditCard: 'Tarjeta de crédito',
                     accountDebit: 'Debito a cuenta'
                 },
+                exchangeType: 'Tipo de canje',
+                cashAmount: 'Monto en efectivo',
+                checkAmount: 'Monto en cheques',
+                invoiceAmount: 'Monto de la factura',
+                exchangeTypes: {
+                    own: 'Canje Propio',
+                    local: 'Canje local',
+                    others: 'Canje plaza'
+                },
                 paymentSchedule: 'Jornada de pago',
                 paymentSchedules: {
                     normal: 'Jornada normal',
@@ -44,7 +53,7 @@ export default {
                 },
                 checkNumber: 'Numero de cheque',
                 agreement: 'Número de convenio',
-                paymentOffice: 'Oficina de recaudo', 
+                paymentOffice: 'Oficina de recaudo',
                 reference1: 'Referencia 1',
                 reference2: 'Referencia 2',
                 terminal: 'Terminal',
@@ -55,6 +64,18 @@ export default {
                 pay: 'Realizar un pago',
                 rollback: 'Reversar un pago'
             }
+        },
+        av_villas: {
+            name: 'Banco AV Villas'
+        },
+        banco_de_bogota: {
+            name: 'Banco De Bogotá'
+        },
+        banco_de_occidente: {
+            name: 'Banco de Occidente'
+        },
+        bancolombia: {
+            name: 'Bancolombia'
         }
     }
 }
