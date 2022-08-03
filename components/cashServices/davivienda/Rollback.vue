@@ -154,7 +154,12 @@ export default {
         if (localStorage.getItem(`davivienda.paymentChannel`)) {
             this.paymentChannel = JSON.parse(localStorage.getItem(`davivienda.paymentChannel`))
         }
-
+        if (localStorage.getItem(`davivienda.paymentOffice`)) {
+            this.paymentOffice = JSON.parse(localStorage.getItem(`davivienda.paymentOffice`))
+        }
+        if (localStorage.getItem(`davivienda.paymentConfirmationCode`)) {
+            this.paymentConfirmationCode = localStorage.getItem(`davivienda.paymentConfirmationCode`)
+        }
         this.invoiceDueDate = (new Date()).toLocaleDateString('en-CA');
 
         this.paymentDate = (new Date()).toLocaleDateString('en-CA');
@@ -163,9 +168,6 @@ export default {
             hour: '2-digit',
             minute: '2-digit', hour12: false
         })
-        if (localStorage.getItem(`davivienda.paymentConfirmationCode`)) {
-            this.paymentConfirmationCode = localStorage.getItem(`davivienda.paymentConfirmationCode`)
-        }
     }
 };
 </script>

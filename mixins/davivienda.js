@@ -123,7 +123,7 @@ export default {
                     v => !!v || this.$i18n.t('validations.required'),
                 ],
                 checkAmount: [
-                    v => !!v || this.$i18n.t('validations.required'),                    
+                    v => !!v || this.$i18n.t('validations.required'),
                 ],
             }
         }
@@ -145,7 +145,7 @@ export default {
             let xml = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.recaudosdavivienda.com/"
  xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
     <soapenv:Header>
-        <wsse:Security soap:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
             <wsse:UsernameToken>
                 <wsse:Username>${this.username}</wsse:Username>
                 <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">${this.password}</wsse:Password>
@@ -165,8 +165,8 @@ export default {
                     <referencia2>${reference2}</referencia2>
                     <terminalRecaudo>${this.terminal}</terminalRecaudo>
                     <tipoMoneda>COP</tipoMoneda>
-                    <valorFactura>${this.paymentAmount}.00</valorFactura>
-                    <valorPagar>${this.paymentAmount}.00</valorPagar>
+                    <valorFactura>${parseFloat(this.paymentAmount).toFixed(2)}</valorFactura>
+                    <valorPagar>${parseFloat(this.paymentAmount).toFixed(2)}</valorPagar>
                 </dto>
             </ser:consultaRecaudo>
         </soapenv:Body></soapenv:Envelope>`;
@@ -193,15 +193,15 @@ export default {
             })).replaceAll(':', '') + '00'
             let reference1 = this.getReference(this.reference1)
             let reference2 = this.getReference(this.reference2)
-            let cashAmount = this.cashAmount ?? 0
-            let checkAmount = this.checkAmount ?? 0
-            let invoiceAmount = this.invoiceAmount ?? 0
-            let totalAmount = cashAmount + checkAmount
-
+            let cashAmount = !this.cashAmount ? 0.00 : parseFloat(this.cashAmount)
+            let checkAmount = !this.checkAmount ? 0.00 : parseFloat(this.checkAmount)
+            let invoiceAmount = !this.invoiceAmount ? 0 : parseFloat(this.invoiceAmount)
+            let totalAmount = (parseFloat(cashAmount) + parseFloat(checkAmount))
+            
             let xml = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.recaudosdavivienda.com/"
             xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
                <soapenv:Header>
-                   <wsse:Security soap:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+                   <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
                        <wsse:UsernameToken>
                            <wsse:Username>${this.username}</wsse:Username>
                            <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">${this.password}</wsse:Password>
@@ -228,18 +228,19 @@ export default {
                        <terminalRecaudo>${this.terminal}</terminalRecaudo>
                        <tipoCanje>${this.exchangeType.value ?? ''}</tipoCanje>
                        <tipoMoneda>COP</tipoMoneda>
-                       <valorCheque>${checkAmount}.00</valorCheque>
-                       <valorEfectivo>${cashAmount}.00</valorEfectivo>
-                       <valorFactura>${invoiceAmount}.00</valorFactura>
-                       <valorTotalRecaudado>${totalAmount}.00</valorTotalRecaudado>
+                       <valorCheque>${checkAmount.toFixed(2)}</valorCheque>
+                       <valorEfectivo>${cashAmount.toFixed(2)}</valorEfectivo>
+                       <valorFactura>${invoiceAmount.toFixed(2)}</valorFactura>
+                       <valorTotalRecaudado>${totalAmount.toFixed(2)}</valorTotalRecaudado>
                     </dto>
                 </ser:notificacionRecaudo>
-                </soapenv:Body></soapenv:Envelope>`
+            </soapenv:Body></soapenv:Envelope>`
 
             $nuxt.$emit('newSoapRequest', xml)
             this.makeRequest('ServicioRecaudosDavivienda', xml);
 
             localStorage.setItem(`davivienda.paymentConfirmationCode`, this.paymentConfirmationCode)
+            localStorage.setItem(`davivienda.paymentOffice`, this.paymentOffice)
         },
         rollback() {
             if (!this.$refs.formRollback.validate()) {
@@ -255,15 +256,15 @@ export default {
             })).replaceAll(':', '') + '00'
             let reference1 = this.getReference(this.reference1)
             let reference2 = this.getReference(this.reference2)
-            let cashAmount = this.cashAmount ?? 0
-            let checkAmount = this.checkAmount ?? 0
-            let invoiceAmount = this.invoiceAmount ?? 0
-            let totalAmount = cashAmount + checkAmount
-
+            let cashAmount = !this.cashAmount ? 0.00 : parseFloat(this.cashAmount)
+            let checkAmount = !this.checkAmount ? 0.00 : parseFloat(this.checkAmount)
+            let invoiceAmount = !this.invoiceAmount ? 0 : parseFloat(this.invoiceAmount)
+            let totalAmount = (parseFloat(cashAmount) + parseFloat(checkAmount))
+            
             let xml = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.recaudosdavivienda.com/"
             xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
                <soapenv:Header>
-                   <wsse:Security soap:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+                   <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
                        <wsse:UsernameToken>
                            <wsse:Username>${this.username}</wsse:Username>
                            <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">${this.password}</wsse:Password>
@@ -289,10 +290,10 @@ export default {
                             <referencia2>${reference2}</referencia2>
                             <terminalRecaudo>${this.terminal}</terminalRecaudo>
                             <tipoMoneda>COP</tipoMoneda>
-                            <valorCheque>${checkAmount}.00</valorCheque>
-                            <valorEfectivo>${cashAmount}.00</valorEfectivo>
-                            <valorFactura>${invoiceAmount}.00</valorFactura>
-                            <valorTotalReversado>${totalAmount}.00</valorTotalReversado>
+                            <valorCheque>${checkAmount.toFixed(2)}</valorCheque>
+                            <valorEfectivo>${cashAmount.toFixed(2)}</valorEfectivo>
+                            <valorFactura>${invoiceAmount.toFixed(2)}</valorFactura>
+                            <valorTotalReversado>${totalAmount.toFixed(2)}</valorTotalReversado>
                         </dto>
                     </ser:reversionNotificacionRecaudo>
                 </soapenv:Body>
