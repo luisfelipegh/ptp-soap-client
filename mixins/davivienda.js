@@ -123,7 +123,7 @@ export default {
                     v => !!v || this.$i18n.t('validations.required'),
                 ],
                 checkAmount: [
-                    v => !!v || this.$i18n.t('validations.required'),                    
+                    v => !!v || this.$i18n.t('validations.required'),
                 ],
             }
         }
@@ -193,9 +193,10 @@ export default {
             })).replaceAll(':', '') + '00'
             let reference1 = this.getReference(this.reference1)
             let reference2 = this.getReference(this.reference2)
-            let cashAmount = this.cashAmount ?? 0
-            let checkAmount = this.checkAmount ?? 0
-            let invoiceAmount = this.invoiceAmount ?? 0
+
+            let cashAmount = !this.cashAmount ? 0 : this.cashAmount
+            let checkAmount = !this.checkAmount ? 0 : this.checkAmount
+            let invoiceAmount = !this.invoiceAmount ? 0 : this.invoiceAmount
             let totalAmount = cashAmount + checkAmount
 
             let xml = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.recaudosdavivienda.com/"
@@ -234,12 +235,13 @@ export default {
                        <valorTotalRecaudado>${totalAmount}.00</valorTotalRecaudado>
                     </dto>
                 </ser:notificacionRecaudo>
-                </soapenv:Body></soapenv:Envelope>`
+            </soapenv:Body></soapenv:Envelope>`
 
             $nuxt.$emit('newSoapRequest', xml)
             this.makeRequest('ServicioRecaudosDavivienda', xml);
 
             localStorage.setItem(`davivienda.paymentConfirmationCode`, this.paymentConfirmationCode)
+            localStorage.setItem(`davivienda.paymentOffice`, this.paymentOffice)
         },
         rollback() {
             if (!this.$refs.formRollback.validate()) {
@@ -255,9 +257,9 @@ export default {
             })).replaceAll(':', '') + '00'
             let reference1 = this.getReference(this.reference1)
             let reference2 = this.getReference(this.reference2)
-            let cashAmount = this.cashAmount ?? 0
-            let checkAmount = this.checkAmount ?? 0
-            let invoiceAmount = this.invoiceAmount ?? 0
+            let cashAmount = !this.cashAmount ? 0 : this.cashAmount
+            let checkAmount = !this.checkAmount ? 0 : this.checkAmount
+            let invoiceAmount = !this.invoiceAmount ? 0 : this.invoiceAmount
             let totalAmount = cashAmount + checkAmount
 
             let xml = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.recaudosdavivienda.com/"

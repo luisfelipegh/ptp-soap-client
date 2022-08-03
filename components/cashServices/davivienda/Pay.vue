@@ -178,12 +178,14 @@ export default {
         if (localStorage.getItem(`davivienda.terminal`)) {
             this.terminal = localStorage.getItem(`davivienda.terminal`)
         }
+        if (localStorage.getItem(`davivienda.paymentOffice`)) {
+            this.paymentOffice = localStorage.getItem(`davivienda.paymentOffice`)
+        }
         if (localStorage.getItem(`davivienda.paymentChannel`)) {
             this.paymentChannel = JSON.parse(localStorage.getItem(`davivienda.paymentChannel`))
         }
 
         this.invoiceDueDate = (new Date()).toLocaleDateString('en-CA');
-
         this.paymentDate = (new Date()).toLocaleDateString('en-CA');
 
         this.paymentTime = (new Date).toLocaleTimeString('en', {
