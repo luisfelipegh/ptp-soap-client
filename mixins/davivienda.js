@@ -156,7 +156,7 @@ export default {
             <ser:consultaRecaudo>
                 <dto>
                     <canal>${this.paymentChannel.value}</canal>
-                    <codigoBanco>51</codigoBanco>
+                    <codigoBanco>${bankCode}</codigoBanco>
                     <codigoIAC>0000000000</codigoIAC>
                     <fechaVencimiento>${fecha}</fechaVencimiento>
                     <jornadaPago>${this.paymentSchedule.value}</jornadaPago>
@@ -212,7 +212,7 @@ export default {
                    <ser:notificacionRecaudo>
                    <dto>
                        <canalRecaudo>${this.paymentChannel.value}</canalRecaudo>
-                       <codigoBanco>51</codigoBanco>
+                       <codigoBanco>${bankCode}</codigoBanco>
                        <codigoConfirmacionRecaudo>${this.paymentConfirmationCode}</codigoConfirmacionRecaudo>
                        <codigoIAC>00000000000</codigoIAC>
                        <fechaRecaudo>${paymentDate}</fechaRecaudo>
@@ -274,7 +274,7 @@ export default {
                     <ser:reversionNotificacionRecaudo>
                         <dto>
                             <canal>${this.paymentChannel.value}</canal>
-                            <codigoBanco>51</codigoBanco>
+                            <codigoBanco>${bankCode}</codigoBanco>
                             <codigoConfirmacionRecaudo>${this.paymentConfirmationCode}</codigoConfirmacionRecaudo>
                             <codigoIAC>000000000000</codigoIAC>
                             <fechaRecaudo>${paymentDate}</fechaRecaudo>
