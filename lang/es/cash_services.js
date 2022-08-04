@@ -4,6 +4,34 @@ export default {
         action: 'Seleccione la acción a realizar'
     },
     services: {
+        bancolombia: {
+            name: 'Bancolombia'
+        },
+        bancoDeBogota: {
+            name: 'Banco de Bogotá'
+        },
+        bancoDeOccidente: {
+            name: 'Banco de Occidente'
+        },
+        avVillas:{
+            name: 'Banco AV Villas',
+            actions: {
+                findByReference: 'Consultar por referencia',
+                pay: 'Realizar un pago',
+                rollback: 'Reversar un pago'
+            },
+            fields: {
+                paymentDate: 'Fecha de recaudo',
+                agreement: 'Convenio',
+                reference: 'Referencia',
+                paymentOffice: 'Oficina de recaudo',
+                paymentTime: 'Hora de recaudo',
+                totalAmount: 'Monto total',
+                paymentConfirmationCode: 'Código de confirmación de recaudo',
+                cashAmount: 'Monto en efectivo',
+                checkAmount: 'Monto en cheques',
+            }
+        },
         davivienda: {
             name: 'Davivienda',
             fields: {
@@ -65,17 +93,5 @@ export default {
                 rollback: 'Reversar un pago'
             }
         },
-        av_villas: {
-            name: 'Banco AV Villas'
-        },
-        banco_de_bogota: {
-            name: 'Banco De Bogotá'
-        },
-        banco_de_occidente: {
-            name: 'Banco de Occidente'
-        },
-        bancolombia: {
-            name: 'Bancolombia'
-        }
     }
 }
