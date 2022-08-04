@@ -2,11 +2,20 @@
   <v-container>
     <h1>{{ $t('cash_services.title') }} {{ this.serviceName ? ' - ' + this.serviceName : '' }}</h1>
     <v-list>
-      <v-row>
-        <v-col v-for="(item, i) in cashServices" :key="i" cols="12" sm="2" md="1" class="align-self-center">
+      <v-row v-if="!isList" class="justify-space-around">
+        <v-col v-for="(item, i) in cashServices" :key="i" cols="12" sm="1" md="1" class="align-self-center">
           <img :src="item.icon" :alt="item.name" @click="selectService(item)">
         </v-col>
       </v-row>
+      <v-list v-else dense>
+        <v-list-item-group color="primary">
+          <v-list-item v-for="(item, i) in cashServices" :key="i" @click="selectService(item)">
+            <v-list-item-content>
+              <v-list-item-title v-text="$t(item.name)"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
     </v-list>
     <component :is="selectedService"></component>
     <RequestResponse></RequestResponse>
@@ -38,6 +47,11 @@ export default {
       selectedService: null,
       serviceName: '',
     }
+  },
+  computed: {
+    isList() {
+      return this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs
+    },
   },
   methods: {
     selectService(item) {

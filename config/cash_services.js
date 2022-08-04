@@ -6,19 +6,19 @@ export default {
         icon: '/cash/davivienda.svg'
     },
     avVillas: {
-        name: 'cash_services.services.av_villas.name',
+        name: 'cash_services.services.avVillas.name',
         path: '',
         component: 'AvVillas',
         icon: '/cash/av_villas.svg'
     },
     bancoDeBogota: {
-        name: 'cash_services.services.banco_de_bogota.name',
+        name: 'cash_services.services.bancoDeBogota.name',
         path: '',
         component: 'BancoDeBogota',
         icon: '/cash/banco_de_bogota.svg'
     },
     bancoDeOccidente: {
-        name: 'cash_services.services.banco_de_occidente.name',
+        name: 'cash_services.services.bancoDeOccidente.name',
         path: '',
         component: 'BancoDeOccidente',
         icon: '/cash/banco_de_occidente.svg'
