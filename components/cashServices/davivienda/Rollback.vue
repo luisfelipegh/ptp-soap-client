@@ -168,6 +168,69 @@ export default {
             hour: '2-digit',
             minute: '2-digit', hour12: false
         })
+    },
+    methods: {
+
+        rollback() {
+            if (!this.$refs.formRollback.validate()) {
+                $nuxt.$emit('showToast', this.$t('generals.invalid_form'))
+                return
+            }
+
+            let dueDate = (this.invoiceDueDate ? this.invoiceDueDate : (new Date()).toLocaleDateString('en-CA')).replaceAll('-', '');
+            let paymentDate = (this.paymentDate ? this.paymentDate : (new Date()).toLocaleDateString('en-CA')).replaceAll('-', '');
+            let hours = (this.paymentTime ? this.paymentTime : (new Date()).toLocaleTimeString('en', {
+                hour: '2-digit',
+                minute: '2-digit', hour12: false
+            })).replaceAll(':', '') + '00'
+            let reference1 = this.getReference(this.reference1)
+            let reference2 = this.getReference(this.reference2)
+            let cashAmount = !this.cashAmount ? 0.00 : parseFloat(this.cashAmount)
+            let checkAmount = !this.checkAmount ? 0.00 : parseFloat(this.checkAmount)
+            let invoiceAmount = !this.invoiceAmount ? 0 : parseFloat(this.invoiceAmount)
+            let totalAmount = (parseFloat(cashAmount) + parseFloat(checkAmount))
+
+            let xml = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.recaudosdavivienda.com/"
+            xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+               <soapenv:Header>
+                   <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+                       <wsse:UsernameToken>
+                           <wsse:Username>${this.username}</wsse:Username>
+                           <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">${this.password}</wsse:Password>
+                       </wsse:UsernameToken>
+                   </wsse:Security>
+            </soapenv:Header>
+                <soapenv:Body>
+                    <ser:reversionNotificacionRecaudo>
+                        <dto>
+                            <canal>${this.paymentChannel.value}</canal>
+                            <codigoBanco>${this.bankCode}</codigoBanco>
+                            <codigoConfirmacionRecaudo>${this.paymentConfirmationCode}</codigoConfirmacionRecaudo>
+                            <codigoIAC>000000000000</codigoIAC>
+                            <fechaRecaudo>${paymentDate}</fechaRecaudo>
+                            <fechaVencimiento>${dueDate}</fechaVencimiento>
+                            <horaRecaudo>${hours}</horaRecaudo>
+                            <indicadorTipoCanje>${this.exchangeType.value ?? ''}</indicadorTipoCanje>
+                            <jornadaRecaudo>${this.paymentSchedule.value}</jornadaRecaudo>
+                            <numeroChequeGirado>${this.checkNumber}</numeroChequeGirado>
+                            <numeroConvenio>${this.agreement}</numeroConvenio>
+                            <oficinaRecaudo>${this.paymentOffice}</oficinaRecaudo>
+                            <referencia1>${reference1}</referencia1>
+                            <referencia2>${reference2}</referencia2>
+                            <terminalRecaudo>${this.terminal}</terminalRecaudo>
+                            <tipoMoneda>COP</tipoMoneda>
+                            <valorCheque>${checkAmount.toFixed(2)}</valorCheque>
+                            <valorEfectivo>${cashAmount.toFixed(2)}</valorEfectivo>
+                            <valorFactura>${invoiceAmount.toFixed(2)}</valorFactura>
+                            <valorTotalReversado>${totalAmount.toFixed(2)}</valorTotalReversado>
+                        </dto>
+                    </ser:reversionNotificacionRecaudo>
+                </soapenv:Body>
+            </soapenv:Envelope>`
+
+            $nuxt.$emit('newSoapRequest', xml)
+            this.makeRequest('ServicioRecaudosDavivienda', xml);
+        }
     }
 };
 </script>
