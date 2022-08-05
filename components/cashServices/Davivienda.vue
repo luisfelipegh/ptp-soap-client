@@ -10,7 +10,9 @@
                 </v-col>
                 <v-col cols="12" md="5">
                     <v-text-field v-model="password" :label="$t('cash_services.services.davivienda.fields.password')"
-                        required>
+                        required @click:append="showPassword = !showPassword"
+                        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="showPassword ? 'text' : 'password'">
                     </v-text-field>
                 </v-col>
                 <v-col cols="12" md="2">
@@ -46,6 +48,7 @@ export default {
         return {
             username: '',
             password: '',
+            showPassword: false,
             action: null,
             actions: [],
         }
