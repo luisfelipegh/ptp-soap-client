@@ -23,7 +23,7 @@ import Pay from './avvillas/Pay.vue';
 import Rollback from './avvillas/Rollback.vue';
 
 export default {
-    name: 'DaviviendaService',
+    name: 'AvVillasService',
     components: {
         FindByReference,
         Pay,

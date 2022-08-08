@@ -111,7 +111,7 @@
                         :label="$t('cash_services.services.davivienda.fields.invoiceAmount')" required>
                     </v-text-field>
                 </v-col>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="4" v-if="isCash">
                     <v-text-field v-model="cashAmount" :rules="rules.cashAmount" prefix="COP" type="number"
                         :label="$t('cash_services.services.davivienda.fields.cashAmount')" required>
                     </v-text-field>
@@ -166,6 +166,9 @@ export default {
     computed: {
         isCheck() {
             return this.paymentMethod.value == 2 || this.paymentMethod.value == 3
+        },
+        isCash(){
+            return this.paymentMethod.value != 2
         }
     },
     beforeMount() {
@@ -213,6 +216,14 @@ export default {
             let invoiceAmount = !this.invoiceAmount ? 0 : parseFloat(this.invoiceAmount)
             let totalAmount = (parseFloat(cashAmount) + parseFloat(checkAmount))
 
+            if (cashAmount + checkAmount != invoiceAmount) {
+                $nuxt.$emit('showToast', this.$i18n.t('validations.different', {
+                    attribute: this.$i18n.t('cash_services.services.davivienda.fields.totalAmount'),
+                    value: this.$i18n.t('cash_services.services.davivienda.fields.cashAmount') + ' + ' + this.$i18n.t('cash_services.services.davivienda.fields.checkAmount')
+                }))
+
+                return
+            }
             let xml = `<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.recaudosdavivienda.com/"
             xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
                <soapenv:Header>
