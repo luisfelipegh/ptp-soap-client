@@ -9,7 +9,6 @@ export default {
     },
     methods: {
         makeRequest(endpoint, request) {
-            let parser = new XMLParser();
             let base = localStorage.getItem(`generalSettings.url`) ?? this.urlBase;
 
             const url = base.endsWith('/') ? base + endpoint : `${base}/${endpoint}`;
