@@ -7,13 +7,34 @@ export default {
         bancolombia: {
             name: 'Bancolombia'
         },
-        bancoDeBogota: {
-            name: 'Banco de Bogotá'
-        },
         bancoDeOccidente: {
             name: 'Banco de Occidente'
         },
-        avVillas:{
+        bancoDeBogota: {
+            name: 'Banco de Bogotá',
+            fields: {
+                username: 'Usuario',
+                password: 'Contraseña',
+                agreement: 'Convenio',
+                paymentDate: 'Fecha de recaudo',
+                paymentTime: 'Hora de recaudo',
+                reference: 'Referencia',
+                paymentConfirmationCode: 'Código de confirmación de recaudo',
+                cashAmount: 'Monto en efectivo',
+                checkAmount: 'Monto en cheques',
+                paymentSchedule: 'Jornada de pago',
+                paymentSchedules: {
+                    normal: 'Jornada normal',
+                    additional: 'Jornada adicional',
+                },
+            },
+            actions: {
+                findByReference: 'Consultar por referencia',
+                pay: 'Realizar un pago',
+                rollback: 'Reversar un pago'
+            }
+        },
+        avVillas: {
             name: 'Banco AV Villas',
             actions: {
                 findByReference: 'Consultar por referencia',
