@@ -5,8 +5,8 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     loading: '~/components/LoadingBar.vue',
-    titleTemplate: '%s - soap-cli',
-    title: 'soap-cli',
+    titleTemplate: '%s',
+    title: process.env.APP_NAME || 'Placetopay SOAP CLI',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -51,6 +51,8 @@ export default {
   ],
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
+    proxyHeaders: true,
+    credentials: false,
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/',
   },
