@@ -13,5 +13,7 @@ export default {
     loading: 'Cargando',
     invalid_form: 'Formulario inválido',
     pay: 'Pagar',
-    reverse: 'Reversar'
+    reverse: 'Reversar',
+    cancel: 'Cancelar',
+    clear: 'Limpiar'
 }

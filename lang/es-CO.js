@@ -1,4 +1,5 @@
 import cash_services from "./es/cash_services";
+import cache from "./es/cache";
 import generals from "./es/generals";
 import settings from "./es/settings";
 import sidebar from "./es/sidebar";
@@ -10,5 +11,6 @@ export default {
     sidebar: sidebar,
     settings: settings,
     cash_services: cash_services,
-    validations: validations
+    validations: validations,
+    cache: cache
 }
