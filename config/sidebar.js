@@ -10,6 +10,11 @@ export default [
         to: '/cash-services'
     },
     {
+        icon: 'mdi-database',
+        title: 'sidebar.cache',
+        to: '/cache'
+    },
+    {
         icon: 'mdi-cogs',
         title: 'sidebar.settings',
         to: '/settings'

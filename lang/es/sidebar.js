@@ -1,5 +1,6 @@
 export default {
     settings : 'Configuraciones',
     home: 'Inicio',
-    cash_services: 'Servicios efectivo'
+    cash_services: 'Servicios efectivo',
+    cache: 'Caché',
 }
